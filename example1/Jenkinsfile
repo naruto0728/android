@@ -1,0 +1,68 @@
+pipeline {
+   
+   agent{
+       label 'mac'
+   }
+   options{
+          //Only keep the 5 most rescent builds
+          buildDiscarder(logRotator(numToKeepStr:'5'))
+          timeout(time: 10, unit: 'MINUTES')
+   }
+   stages{
+   stage('Preparation') { // for display purposes
+      // Get some code from a GitHub repository
+      steps{
+      git 'https://github.com/AliceCodeZhang/androidSample.git'
+      }
+   }
+   stage('Clean'){
+       steps{
+         sh "pwd;cd ./example1;./gradlew clean"
+       }
+   }
+   stage('Build and Install App') {
+      // Run the maven build
+        steps{
+         sh "source ~/.bashrc"
+         sh "pwd;cd ./example1;./gradlew assembleDebug installDebug"
+        } 
+      }
+    stage('Build and Install Test') {
+        steps{
+        sh"pwd;cd ./example1;./gradlew assembleDebugAndroidTest installDebugAndroidTest"   
+        }
+    }
+    stage("Test"){
+        steps{
+         sh "source ~/.bashrc;adb shell am instrument -w -r   -e debug false -e class com.application.example1.ExampleInstrumentedTest com.application.example1.test/android.support.test.runner.AndroidJUnitRunner | tee testresult.txt"
+        }
+    }
+   stage('Results') {
+      steps{
+         sh "grep 'OK' testresult.txt"
+         archive '**/app/build/outputs/apk/*.apk'
+  
+      }
+   }
+   stage('Release'){
+       steps{
+         sh "echo upload apk file"
+       }
+   }
+   }
+      post{
+      always{
+        echo "Finished whole process"
+      }
+      success{
+        echo "${env.BUILD_URL} is successed"
+      }
+      failure{
+        echo " ${env.BUILD_URL} is failed"
+      }
+      unstable{
+        echo "${env.BUILD_URL} is unstable"
+      }
+
+   }
+}
