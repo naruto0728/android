@@ -12,7 +12,7 @@ pipeline {
    stage('Preparation') { // for display purposes
       // Get some code from a GitHub repository
       steps{
-      git 'https://github.com/AliceCodeZhang/androidSample.git'
+      git 'https://github.com/naruto0728/android.git'
       }
    }
    stage('Clean'){
