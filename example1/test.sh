@@ -1,5 +1,5 @@
 ### this is test scripts #
-export ANDROID_HOME=/Users/alice/Library/Android/sdk
+export ANDROID_HOME=/Users/naruto0728/Library/Android/sdk/
 export PATH=${PATH}:${ANDROID_HOME}/tools
 export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 #build
