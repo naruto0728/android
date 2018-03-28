@@ -1,7 +1,7 @@
 pipeline {
    
    agent{
-       label 'mac'
+       label 'master'
    }
    options{
           //Only keep the 5 most rescent builds
@@ -34,7 +34,7 @@ pipeline {
     }
     stage("Test"){
         steps{
-         sh "source ~/.bashrc;adb shell am instrument -w -r   -e debug false -e class com.application.example1.ExampleInstrumentedTest com.application.example1.test/android.support.test.runner.AndroidJUnitRunner | tee testresult.txt"
+         sh "adb shell am instrument -w -r   -e debug false -e class com.application.example1.ExampleInstrumentedTest com.application.example1.test/android.support.test.runner.AndroidJUnitRunner | tee testresult.txt"
         }
     }
    stage('Results') {
