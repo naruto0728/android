@@ -23,7 +23,6 @@ pipeline {
    stage('Build and Install App') {
       // Run the maven build
         steps{
-         sh "source ~/.bashrc"
          sh "pwd;cd ./example1;./gradlew assembleDebug installDebug"
         } 
       }
